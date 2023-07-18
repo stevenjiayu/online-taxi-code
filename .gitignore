@@ -1,0 +1,4 @@
+# Project exclude paths
+/api-messenger/target/
+/internal-common/target/
+/target/
