@@ -7,8 +7,12 @@ import lombok.Getter;
 
 public enum CommonStateEnum {
 
+
+    VERICATION_CODE_ERROR(1099,"驗證碼過期"),
     SUCCESS(1,"成功"),
-    FAIL(0,"失敗")
+    FAIL(0,"失敗"),
+
+
 
     ;
 

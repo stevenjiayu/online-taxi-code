@@ -14,6 +14,16 @@ public class ResponseResult<T> {
     private T data;
 
 
+    public static <T> ResponseResult success(){
+
+        return new ResponseResult()
+                .setCode(CommonStateEnum.SUCCESS.getCode())
+                .setMessage(CommonStateEnum.SUCCESS.getValue())
+                ;
+
+    }
+
+
     public static <T> ResponseResult success(T data){
 
         return new ResponseResult()

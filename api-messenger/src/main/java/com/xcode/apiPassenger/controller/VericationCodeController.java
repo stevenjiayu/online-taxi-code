@@ -14,7 +14,7 @@ public class VericationCodeController {
     private VeriCationCodeService verificationCodeService;
 
     @PostMapping("/verification-code")
-    public String verificationCode(@RequestBody VericationDto vericationDto){
+    public ResponseResult verificationCode(@RequestBody VericationDto vericationDto){
 
         String passengerPhone = vericationDto.getPassengerPhone();
         System.out.println("receive"+passengerPhone);

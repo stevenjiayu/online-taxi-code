@@ -1,12 +1,14 @@
 package com.xcode.apiPassenger.service;
 
 
+import com.xcode.CommonStateEnum;
 import com.xcode.apiPassenger.remote.ServiceVericationCodeClient;
 import com.xcode.dto.ResponseResult;
 import com.xcode.response.NumberCodeResponse;
 import com.xcode.response.TokenResponse;
 import com.xcode.util.RedisPrefixUtils;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -26,7 +28,7 @@ public class VeriCationCodeService {
 
     private String vericationCodePrefix = "passenger-vericaton-code";
 
-    public String generateCode(String passengerPhone){
+    public ResponseResult generateCode(String passengerPhone){
 
 
       ResponseResult<NumberCodeResponse> numberCodeResponse = serviceVCodeClient.getNumberCode(6);
@@ -36,23 +38,33 @@ public class VeriCationCodeService {
         // 存入redis
         // key,value,过期时间
 
-        String key = vericationCodePrefix+ passengerPhone;
+        String key = generatekeyByPhone(passengerPhone);
         //String key = RedisPrefixUtils.generatorKeyByPhone(passengerPhone,IdentityConstants.PASSENGER_IDENTITY) ;
         // 存入redis
         stringRedisTemplate.opsForValue().set(key,numberCode+"",2, TimeUnit.MINUTES);
 
-        System.out.println("api-messne"+numberCode);
 
-        JSONObject result =new JSONObject();
-        result.put("code",1);
-        result.put("message","success");
+        //無參數回傳操作
+        return ResponseResult.success();
+    }
 
 
-        return result.toString();
+    private String generatekeyByPhone(String passengerPhone){
+
+        return   vericationCodePrefix+ passengerPhone;
     }
 
     public ResponseResult checkCode(String passengerPhone,String vericationCode){
 
+
+        String key = generatekeyByPhone(passengerPhone);
+        String codeRedis =stringRedisTemplate.opsForValue().get(key);
+        System.out.println("redis value :" +codeRedis);
+        if(StringUtils.isBlank(codeRedis)){
+
+            return  ResponseResult.fail(CommonStateEnum.VERICATION_CODE_ERROR.getCode(),
+                    CommonStateEnum.VERICATION_CODE_ERROR.getValue());
+        }
 
         TokenResponse tokenResponse =new TokenResponse();
         tokenResponse.setToken("token value");
