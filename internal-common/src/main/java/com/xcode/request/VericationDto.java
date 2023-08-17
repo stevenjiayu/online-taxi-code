@@ -1,4 +1,4 @@
-package com.xcode.apiPassenger.request;
+package com.xcode.request;
 
 
 import lombok.Data;

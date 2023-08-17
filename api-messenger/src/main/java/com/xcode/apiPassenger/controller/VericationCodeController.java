@@ -1,9 +1,10 @@
 package com.xcode.apiPassenger.controller;
 
 
-import com.xcode.apiPassenger.request.VericationDto;
+
 import com.xcode.apiPassenger.service.VeriCationCodeService;
 import com.xcode.dto.ResponseResult;
+import com.xcode.request.VericationDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
