@@ -1,8 +1,9 @@
 package com.xcode.apiPassenger.service;
 
 
-import com.xcode.CommonStateEnum;
+
 import com.xcode.apiPassenger.remote.ServiceVericationCodeClient;
+import com.xcode.constant.CommonStatusEnum;
 import com.xcode.dto.ResponseResult;
 import com.xcode.response.NumberCodeResponse;
 import com.xcode.response.TokenResponse;
@@ -60,11 +61,12 @@ public class VeriCationCodeService {
         String key = generatekeyByPhone(passengerPhone);
         String codeRedis =stringRedisTemplate.opsForValue().get(key);
         System.out.println("redis value :" +codeRedis);
-        if(StringUtils.isBlank(codeRedis)){
 
-            return  ResponseResult.fail(CommonStateEnum.VERICATION_CODE_ERROR.getCode(),
-                    CommonStateEnum.VERICATION_CODE_ERROR.getValue());
+        if (StringUtils.isBlank(codeRedis)){
+            return ResponseResult.fail(CommonStatusEnum.VERIFICATION_CODE_ERROR.getCode(),CommonStatusEnum.VERIFICATION_CODE_ERROR.getValue());
         }
+
+
 
         TokenResponse tokenResponse =new TokenResponse();
         tokenResponse.setToken("token value");
