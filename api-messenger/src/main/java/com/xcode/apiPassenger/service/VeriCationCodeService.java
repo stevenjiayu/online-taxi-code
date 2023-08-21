@@ -2,9 +2,11 @@ package com.xcode.apiPassenger.service;
 
 
 
+import com.xcode.apiPassenger.remote.ServicePassengerUserClient;
 import com.xcode.apiPassenger.remote.ServiceVericationCodeClient;
 import com.xcode.constant.CommonStatusEnum;
 import com.xcode.dto.ResponseResult;
+import com.xcode.request.VericationDto;
 import com.xcode.response.NumberCodeResponse;
 import com.xcode.response.TokenResponse;
 import com.xcode.util.RedisPrefixUtils;
@@ -22,6 +24,10 @@ public class VeriCationCodeService {
 
     @Autowired
     private ServiceVericationCodeClient serviceVCodeClient;
+
+
+    @Autowired
+    private ServicePassengerUserClient servicePassengerUserClient;
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
@@ -69,6 +75,12 @@ public class VeriCationCodeService {
         if (!vericationCode.trim().equals(codeRedis.trim())){
             return ResponseResult.fail(CommonStatusEnum.VERIFICATION_CODE_ERROR.getCode(),CommonStatusEnum.VERIFICATION_CODE_ERROR.getValue());
         }
+
+        //遠程服務調用
+
+        VericationDto vericationDto =new VericationDto();
+        vericationDto.setPassengerPhone(passengerPhone);
+        servicePassengerUserClient.loginorRegister(vericationDto);
 
 
 
