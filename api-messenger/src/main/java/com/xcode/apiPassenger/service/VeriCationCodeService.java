@@ -5,11 +5,13 @@ package com.xcode.apiPassenger.service;
 import com.xcode.apiPassenger.remote.ServicePassengerUserClient;
 import com.xcode.apiPassenger.remote.ServiceVericationCodeClient;
 import com.xcode.constant.CommonStatusEnum;
+import com.xcode.constant.IdentityConstants;
 import com.xcode.dto.ResponseResult;
 import com.xcode.request.VericationDto;
 import com.xcode.response.NumberCodeResponse;
 import com.xcode.response.TokenResponse;
-import com.xcode.util.RedisPrefixUtils;
+
+import com.xcode.util.Jwtutils;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,10 +84,10 @@ public class VeriCationCodeService {
         vericationDto.setPassengerPhone(passengerPhone);
         servicePassengerUserClient.loginorRegister(vericationDto);
 
-
+        String token = Jwtutils.generatorToken(passengerPhone, IdentityConstants.PASSENGER_IDENTITY);
 
         TokenResponse tokenResponse =new TokenResponse();
-        tokenResponse.setToken("token value");
+        tokenResponse.setToken(token);
         return ResponseResult.success(tokenResponse);
 
     }

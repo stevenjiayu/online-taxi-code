@@ -32,4 +32,18 @@ public class VericationCodeController {
         return verificationCodeService.checkCode(passengerPhone,vericationCode);
 
     }
+
+    @GetMapping("/auth")
+    public ResponseResult auth(){
+        return ResponseResult.success("auth test");
+    }
+
+    @GetMapping("/noauth")
+    public ResponseResult noauth(){
+        return ResponseResult.success("noauth test");
+    }
+
+
+
+
 }

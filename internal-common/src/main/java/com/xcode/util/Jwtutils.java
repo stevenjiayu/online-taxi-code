@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.xcode.dto.TokenResult;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -15,12 +16,17 @@ public class Jwtutils {
 
 
     private static final  String   SIGN = "CPFxcode!@#$%$";
-    private static final  String   JWT_KEY = "passengerPhone";
+    private static final  String   JWT_KEY_phone = "phone";
+    private static final  String   JWT_KEY_IDENTITY = "identity";
 
-    public static String generatorToken(String passengerPhone){
+    public static String generatorToken(String passengerPhone,String identity){
 
         Map<String,String> map =new HashMap<>();
-        map.put(JWT_KEY ,passengerPhone);
+        map.put(JWT_KEY_phone ,passengerPhone);
+        map.put(JWT_KEY_IDENTITY ,identity);
+
+
+
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE,1);
         Date date = calendar.getTime();
@@ -42,11 +48,17 @@ public class Jwtutils {
         return sign;
     }
 
-    public static  String parseToken(String token){
+    public static  TokenResult parseToken(String token){
 
         DecodedJWT verify= JWT.require(Algorithm.HMAC256(SIGN)).build().verify(token);
-        Claim claim = verify.getClaim(JWT_KEY );
-        return claim.toString();
+        String phone = verify.getClaim(JWT_KEY_phone).toString();
+        String identity = verify.getClaim(JWT_KEY_IDENTITY).toString();
+
+        TokenResult tokenResult =new TokenResult();
+        tokenResult.setPhone(phone);
+        tokenResult.setIdentity(identity);
+
+        return tokenResult;
     }
 
 
@@ -65,7 +77,7 @@ public class Jwtutils {
 //        map.put("age","18");
 
 
-        String s =generatorToken("13922323");
+        String s =generatorToken("13922323","1");
 
         System.out.println(s);
         System.out.println(parseToken(s));
